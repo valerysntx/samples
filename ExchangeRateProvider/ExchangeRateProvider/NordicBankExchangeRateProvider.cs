@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExchangeRateProvider.Model;
 
 namespace ExchangeRateProvider
@@ -14,7 +16,16 @@ namespace ExchangeRateProvider
 
         public override IEnumerable<ExchangeRateDto> GetExchangeRates(IEnumerable<CurrencyDto> currencies)
         {
-            return Currency.GetExchangeRatesAsync().Result;
+
+            var exchangeRates = Currency.GetExchangeRatesAsync()?.Result;
+            if (exchangeRates != null)
+            {
+                if (currencies == null) return exchangeRates.ToList();
+
+                var codes = currencies.Select(c => c.Code);
+                return exchangeRates.Where(x => codes.Contains(x.SourceCurrency.Code, EqualityComparer<string>.Default)).ToList();
+            }
+            throw new InvalidOperationException();
         }
     }
 }

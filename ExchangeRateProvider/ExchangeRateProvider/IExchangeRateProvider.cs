@@ -6,7 +6,7 @@ namespace ExchangeRateProvider
     /// <summary>
     /// ExchangeRatesProvider contract
     /// </summary>
-    internal interface IExchangeRateProvider
+    public interface IExchangeRateProvider
     {
         /// <summary>
         /// GetExchangeRates contract
